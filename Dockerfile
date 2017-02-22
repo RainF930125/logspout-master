@@ -4,8 +4,9 @@ VOLUME /mnt/routes
 EXPOSE 80
 
 COPY . /src
-RUN chmod a+x /src/build.sh
 RUN cd /src && ./build.sh "$(cat VERSION)"
 
-
-RUN cd /src && ./build.sh "$(cat VERSION)-custom"
+ONBUILD COPY ./build.sh /src/build.sh
+ONBUILD RUN chmod a+x /build.sh
+ONBUILD COPY ./modules.go /src/modules.go
+ONBUILD RUN cd /src && ./build.sh "$(cat VERSION)-custom"
